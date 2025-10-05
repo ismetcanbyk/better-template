@@ -113,8 +113,6 @@ Content-Type: application/json
 **Response:** User object + session token  
 ✅ **Cookie `better-auth.session_token` automatically set**
 
-> See [API.md](./API.md) for complete API documentation with all endpoints and examples.
-
 #### Other Auth Endpoints
 
 - `POST /api/auth/sign-in/email` - Sign in
@@ -122,8 +120,6 @@ Content-Type: application/json
 - `POST /api/auth/sign-out` - Sign out (clears cookie)
 - `POST /api/auth/forget-password` - Request password reset
 - `POST /api/auth/reset-password` - Reset password with token
-
-**📖 Complete documentation:** [API.md](./API.md)
 
 ### Other Endpoints
 
@@ -150,11 +146,10 @@ better-template/
 │   ├── client.ts              # Prisma client instance
 │   └── migrations/            # Database migrations
 ├── src/
-│   ├── auth/
-│   │   ├── auth.controller.ts # Auth request handlers
-│   │   └── auth.service.ts    # Auth business logic
 │   ├── config/
 │   │   └── validate-env.ts    # Environment validation with Zod
+│   ├── controllers/
+│   │   └── user.controller.ts # User request handlers
 │   ├── middleware/
 │   │   ├── auth-guard.ts      # Auth middleware
 │   │   ├── cors.ts            # CORS configuration
@@ -163,16 +158,22 @@ better-template/
 │   │   ├── request-logger.ts  # Request logging
 │   │   └── validate-request.ts # Zod validation middleware
 │   ├── routes/
-│   │   ├── auth.routes.ts     # Auth routes
+│   │   ├── user.routes.ts     # User routes (includes auth)
 │   │   └── index.ts           # Routes aggregation
 │   ├── schemas/
 │   │   ├── auth.schema.ts     # Auth validation schemas
 │   │   ├── user.schema.ts     # User validation schemas
 │   │   ├── common.schema.ts   # Common validation schemas
 │   │   └── index.ts           # Schema exports
+│   ├── services/
+│   │   └── user.service.ts    # User business logic
+│   ├── types/
+│   │   └── user-select-type.ts # Type definitions
 │   ├── app.ts                 # Express app configuration
 │   ├── auth.ts                # Better Auth configuration
 │   └── index.ts               # Server entry point
+├── generated/
+│   └── prisma/                # Generated Prisma client
 ├── .env                       # Environment variables (create this)
 ├── .gitignore
 ├── package.json
@@ -270,82 +271,6 @@ npm run prisma:push      # Push schema to DB (no migration)
 npm test                 # Run tests (TODO)
 ```
 
-## 🎯 Adding New Features
-
-### Create a new module (e.g., Posts)
-
-1. **Create schema** (`src/schemas/post.schema.ts`)
-
-```typescript
-import { z } from "zod";
-
-export const createPostSchema = z.object({
-  title: z.string().min(3).max(200),
-  content: z.string().min(10),
-});
-
-export type CreatePostInput = z.infer<typeof createPostSchema>;
-```
-
-2. **Create service** (`src/posts/post.service.ts`)
-
-```typescript
-import { prisma } from "../../prisma/client";
-
-export class PostService {
-  async createPost(userId: string, data: CreatePostInput) {
-    return prisma.post.create({
-      data: { ...data, authorId: userId },
-    });
-  }
-}
-
-export const postService = new PostService();
-```
-
-3. **Create controller** (`src/posts/post.controller.ts`)
-
-```typescript
-import { Request, Response, NextFunction } from "express";
-import { postService } from "./post.service";
-
-export const createPost = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const post = await postService.createPost(req.user.id, req.body);
-    res.status(201).json({ success: true, data: post });
-  } catch (error) {
-    next(error);
-  }
-};
-```
-
-4. **Create routes** (`src/routes/post.routes.ts`)
-
-```typescript
-import { Router } from "express";
-import { authGuard } from "../middleware/auth-guard";
-import { validate } from "../middleware/validate-request";
-import { createPostSchema } from "../schemas/post.schema";
-import { createPost } from "../posts/post.controller";
-
-const router = Router();
-
-router.post("/", authGuard, validate({ body: createPostSchema }), createPost);
-
-export default router;
-```
-
-5. **Register routes** (`src/routes/index.ts`)
-
-```typescript
-import postRoutes from "./post.routes";
-router.use("/posts", postRoutes);
-```
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please follow the existing code style and structure.
@@ -363,9 +288,7 @@ ISC
 
 ## 📧 Contact
 
-Your Name - [@yourusername](https://twitter.com/yourusername)
-
-Project Link: [https://github.com/yourusername/better-template](https://github.com/yourusername/better-template)
+Project Link: [https://github.com/ismetcanbyk/better-template](https://github.com/ismetcanbyk/better-template)
 
 ---
 
