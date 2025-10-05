@@ -48,12 +48,7 @@ export const updateUserSchema = z.object({
     .max(100, "Name must not exceed 100 characters")
     .trim()
     .optional(),
-  email: z
-    .string()
-    .email("Invalid email format")
-    .toLowerCase()
-    .trim()
-    .optional(),
+  email: z.string().toLowerCase().trim().optional(),
 });
 
 // ==================== GROUPED EXPORT ====================

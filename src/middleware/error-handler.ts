@@ -65,3 +65,7 @@ export const forbidden = (message = "Forbidden") => {
 export const badRequest = (message = "Bad request") => {
   return new ApiError(400, message);
 };
+
+export const conflict = (message = "Conflict") => {
+  return new ApiError(409, message);
+};

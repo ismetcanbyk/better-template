@@ -1,6 +1,9 @@
 import { Router } from "express";
+import userRoutes from "./user.routes";
 
 const router = Router();
+
+router.use("/users", userRoutes);
 
 // Health check
 router.get("/health", (req, res) => {
@@ -25,8 +28,16 @@ router.get("/", (req, res) => {
         signOut: "POST /api/auth/sign-out",
         session: "GET /api/auth/get-session",
       },
-      users: "/api/users ",
-      health: "/api/health",
+      users: {
+        getAll: "GET /api/users",
+        search: "GET /api/users/search?q=query",
+        getMe: "GET /api/users/me",
+        getById: "GET /api/users/:id",
+        update: "PUT /api/users/:id",
+        delete: "DELETE /api/users/:id",
+        stats: "GET /api/users/stats",
+      },
+      health: "GET /api/health",
     },
   });
 });
