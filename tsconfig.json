@@ -1,27 +1,74 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "allowJs": true,
-    "outDir": "./dist",
-    "removeComments": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
-    "skipLibCheck": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "typeRoots": ["node_modules/@types"],
-    "baseUrl": ".",
+    // Language and Module Settings
+    "target": "ES2022", // Modern JavaScript features
+    "module": "ESNext", // ESM modules
+    "moduleResolution": "bundler", // Modern resolution
+    "lib": ["ES2022"], // Available APIs
 
+    // Module System
+    "esModuleInterop": true, // CommonJS compatibility
+    "allowSyntheticDefaultImports": true, // Default import support
+    "resolveJsonModule": true, // JSON import support
+    "isolatedModules": true, // For fast compilation
+
+    // File Management
+    "outDir": "./dist", // Output folder
+    "removeComments": true, // Remove comments
+    "sourceMap": true, // Source map for debugging
+    "inlineSources": true, // Include sources in map
+
+    // Type Checking - Strict Mode
+    "strict": true, // All strict checks
+    "noImplicitAny": true, // Warns about implicit any type
+    "strictNullChecks": true, // null/undefined checking
+    "strictFunctionTypes": true, // Function types
+    "strictBindCallApply": true, // bind/call/apply checking
+    "strictPropertyInitialization": true, // Class property initialization
+    "noImplicitThis": true, // this type checking
+    "alwaysStrict": true, // Add "use strict"
+
+    // Additional Checks
+    "noUnusedLocals": true, // Unused variables
+    "noUnusedParameters": true, // Unused parameters
+    "noImplicitReturns": true, // Missing return checking
+    "noFallthroughCasesInSwitch": true, // Switch case checking
+    "noUncheckedIndexedAccess": true, // Array/Object access safety
+    "allowUnusedLabels": false, // Unused labels
+    "allowUnreachableCode": false, // Unreachable code
+
+    // Decorator Support
+    "experimentalDecorators": true, // Decorator usage
+    "emitDecoratorMetadata": true, // Emit metadata
+
+    // Other Settings
+    "skipLibCheck": true, // Skip node_modules type checking
+    "forceConsistentCasingInFileNames": true, // File name consistency
+    "allowJs": true, // Allow JS files
+
+    // Path Mapping
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@services/*": ["src/services/*"],
+      "@models/*": ["src/models/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@utils/*": ["src/utils/*"],
+      "@types/*": ["src/types/*"]
     },
 
-    "sourceMap": true,
-    "inlineSources": true
+    // Type Definitions
+    "types": ["node"],
+    "typeRoots": ["node_modules/@types", "src/types"]
   },
+
   "include": ["src/**/*", "prisma/client.ts"],
-  "exclude": ["node_modules", "dist", "scripts"]
+
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"],
+
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
 }

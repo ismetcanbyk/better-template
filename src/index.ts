@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { env } from "./config/validate-env";
+import { env } from "./env";
 import app from "./app";
 import { prisma } from "../prisma/client";
 

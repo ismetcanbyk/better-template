@@ -3,8 +3,8 @@ import { unauthorized } from "./error-handler";
 import { auth } from "../auth";
 
 export interface AuthenticatedRequest extends Request {
-  user?: any;
-  session?: any;
+  user?: typeof auth.$Infer.Session.user | null;
+  session?: typeof auth.$Infer.Session.session | null;
 }
 
 export const authGuard = async (
@@ -14,7 +14,7 @@ export const authGuard = async (
 ) => {
   try {
     const session = await auth.api.getSession({
-      headers: req.headers as any,
+      headers: req.headers,
     });
 
     if (!session) {
@@ -23,7 +23,7 @@ export const authGuard = async (
 
     // User bilgilerini request'e ekle
     req.user = session.user;
-    req.session = session;
+    req.session = session.session;
 
     next();
   } catch (error) {
@@ -34,17 +34,16 @@ export const authGuard = async (
 // Opsiyonel auth - session varsa ekle, yoksa devam et
 export const optionalAuth = async (
   req: AuthenticatedRequest,
-  res: Response,
   next: NextFunction
 ) => {
   try {
     const session = await auth.api.getSession({
-      headers: req.headers as any,
+      headers: req.headers,
     });
 
     if (session) {
       req.user = session.user;
-      req.session = session;
+      req.session = session.session;
     }
 
     next();
@@ -57,7 +56,6 @@ export const optionalAuth = async (
 // Email doğrulama kontrolü
 export const requireEmailVerified = (
   req: AuthenticatedRequest,
-  res: Response,
   next: NextFunction
 ) => {
   if (!req.user) {

@@ -1,5 +1,5 @@
 import rateLimit, { Options } from "express-rate-limit";
-import { env } from "../config/validate-env";
+import { env } from "../env";
 
 /**
  * Base rate limit configuration

@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { isDevelopment } from "../config/validate-env";
+import { env } from "../env";
+
+const isDevelopment = env.NODE_ENV === "development";
 
 interface AppError extends Error {
   statusCode?: number;

@@ -1,5 +1,5 @@
 import { userSelectFields } from "@/types/user-select-type";
-import { prisma } from "../../prisma/client";
+import { prisma } from "prisma/client";
 import {
   notFound,
   forbidden,
@@ -11,7 +11,6 @@ import {
   SearchQueryInput,
   UpdateUserInput,
 } from "../schemas/user.schema";
-import type { Prisma } from "generated/prisma";
 
 export class UserService {
   static async getAllUsers(paginationInput: PaginationInput) {
@@ -76,7 +75,7 @@ export class UserService {
 
     const [users, total] = await Promise.all([
       prisma.user.findMany({
-        where: whereClause as Prisma.UserWhereInput,
+        where: whereClause,
         skip,
         take,
         orderBy: {
@@ -84,7 +83,7 @@ export class UserService {
         },
         select: userSelectFields,
       }),
-      prisma.user.count({ where: whereClause as Prisma.UserWhereInput }),
+      prisma.user.count({ where: whereClause }),
     ]);
 
     const totalPages = Math.ceil(total / take);

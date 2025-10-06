@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { env } from "../config/validate-env";
+import { env } from "../env";
 
 // CORS options
 interface CorsOptions {
@@ -69,6 +69,6 @@ export const devCors = cors({
 
 // Production CORS (strict - uses env variables)
 export const prodCors = cors({
-  allowedOrigins: env.ALLOWED_ORIGINS,
+  allowedOrigins: env.ALLOWED_ORIGINS.split(","),
   credentials: true,
 });

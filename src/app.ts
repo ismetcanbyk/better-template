@@ -7,8 +7,10 @@ import helmet from "helmet";
 import { errorHandler } from "./middleware/error-handler";
 import { apiRateLimit } from "./middleware/rate-limit";
 import { devCors, prodCors } from "./middleware/cors";
-import { isProduction } from "./config/validate-env";
+import { env } from "./env";
 import { auth } from "./auth";
+
+const isProduction = env.NODE_ENV === "production";
 import { toNodeHandler } from "better-auth/node";
 
 const app: Application = express();
